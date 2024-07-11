@@ -11,7 +11,6 @@ async function getMonedas() {
         const errorSpan = document.getElementById('error');
         errorSpan.innerHTML = `Algo salió mal! Error: ${e.message}`;
     }
-
 }
 
 async function renderMonedas() {
