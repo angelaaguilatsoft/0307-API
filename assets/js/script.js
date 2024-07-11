@@ -1,9 +1,17 @@
 const apiURL = 'https://mindicador.cl/api/'
 
 async function getMonedas() {
-    const res = await fetch(apiURL);
-    const monedas = await res.json();
-     return(monedas);
+    try {
+        console.log(`Ingreso para obtener los datos de la API`);
+        const res = await fetch(apiURL);
+        const monedas = await res.json();
+        return(monedas);
+    } catch (e) {
+        console.log(`ERROR para obtener los datos de la API`);
+        const errorSpan = document.getElementById('error');
+        errorSpan.innerHTML = `Algo salió mal! Error: ${e.message}`;
+    }
+
 }
 
 async function renderMonedas() {
@@ -31,9 +39,8 @@ function prepararConfiguracionParaLaGrafica(monedas) {
     const titulo = "Monedas";
     const colorDeLinea = "blue";
     let monedas10 = monedas.serie.slice(0,10); // arreglo solo con los ultimos 10 registros
-    const nombresDeLasMonedas = monedas10.map((moneda) => moneda.fecha); // Datos en Eje X
+    const nombresDeLasMonedas = monedas10.map((moneda) => moneda.fecha.substring(0,10)); // Datos en Eje X
     const valores = monedas10.map((moneda) => moneda.valor); // Datos en Eje Y
-
     // Creamos el objeto de configuración usando las variables anteriores
     const config = {
         type: tipoDeGrafica,
@@ -57,4 +64,3 @@ async function renderGrafica(tipomoneda) {
     const chartDOM = document.getElementById("myChart");
     new Chart(chartDOM, config);
 }                
-
