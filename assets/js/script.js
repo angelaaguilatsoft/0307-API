@@ -1,5 +1,6 @@
 const apiURL = "https://mindicador.cl/api/";
-const tipomoneda = document.getElementById("tipoMoneda").value;
+let tipomoneda = document.getElementById("tipoMoneda").value;
+let myChart;
 
 async function getMonedas() {
     // Obtener datos de la API
@@ -62,13 +63,20 @@ async function renderGrafica(tipomoneda) {
     try {
         const monedas = await getTipoMonedas(tipomoneda);
         const config = prepararConfiguracionParaLaGrafica(monedas);
-        const chartDOM = document.getElementById("myChart");
-        console.log(chartDOM);
-        new Chart(chartDOM, config);        
+        let chartDOM = document.getElementById("myChart");
+        console.log(myChart);
+        if (myChart) {
+            console.log('destruye mychart con moneda ' + tipomoneda);
+            myChart.destroy();
+            myChart = new Chart(chartDOM, config);
+        }else {
+            console.log('crea mychart con moneda ' + tipomoneda);
+            myChart = new Chart(chartDOM, config);
+        }
+        
     } catch (error) {
-        console.log(`ERROR al obtener los datos de la API`);
-        const errorSpan = document.getElementById("errorGraf");
-        errorSpan.innerHTML = `<p><strong>*** Error al generar gráfico: ${error.message} ***</strong></p>
-        `;
+            const errorSpan = document.getElementById("errorGraf");
+            errorSpan.innerHTML = `<p><strong>*** Error al generar gráfico: ${error.message} ***</strong></p>`;
     }
 }
+
